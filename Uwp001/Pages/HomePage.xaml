@@ -2,7 +2,6 @@
     x:Class="Uwp001.Pages.HomePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:extensions="using:Microsoft.Toolkit.Uwp.UI.Extensions"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:canvas="using:Microsoft.Graphics.Canvas.UI.Xaml"
@@ -80,9 +79,6 @@
                                   Margin="10,-120,10,6"
                                   Grid.Row="2"
                                   Draw="canvas_Draw" />
-            <!--<canvas:CanvasAnimatedControl x:Name="canvas"
-                                            Grid.Row="2" 
-                                            Draw="canvas_DrawAnimated" CreateResources="canvas_CreateResources"/>-->
 
             <StackPanel x:Name="gaussianBlurAmountSliderParentPanel" HorizontalAlignment="Stretch" VerticalAlignment="Top" 
                         Orientation="Vertical" Grid.Row="2" Grid.Column="1"  

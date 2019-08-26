@@ -1,7 +1,6 @@
 ﻿using System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI;
 using System.Numerics;
 using Microsoft.Graphics.Canvas;
 using Microsoft.Graphics.Canvas.Effects;
@@ -9,10 +8,7 @@ using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media.Imaging;
-using Windows.Foundation;
 using Windows.Graphics.Imaging;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -24,9 +20,13 @@ namespace Uwp001.Pages
     public sealed partial class HomePage : Page
     {
         CanvasCommandList cl;
+        GaussianBlurEffect blur;
+        HueRotationEffect hueRotation;
+        ContrastEffect contrast;
+
         public HomePage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         // The Draw event is raised once when the CanvasControl first becomes visible, then again any time its contents need to be redrawn. 
@@ -35,58 +35,10 @@ namespace Uwp001.Pages
         // Reference: https://microsoft.github.io/Win2D/html/E_Microsoft_Graphics_Canvas_UI_Xaml_CanvasControl_Draw.htm
         private void canvas_Draw(Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl sender, Microsoft.Graphics.Canvas.UI.Xaml.CanvasDrawEventArgs args)
         {
-            //CanvasCommandList cl = new CanvasCommandList(sender);
-            //using (CanvasDrawingSession clds = cl.CreateDrawingSession())
-            //{
-            //    for (int i = 0; i < 100; i++)
-            //    {
-            //        clds.DrawText("Hello, World!", RndPosition(), Color.FromArgb(255, RndByte(), RndByte(), RndByte()));
-            //        clds.DrawCircle(RndPosition(), RndRadius(), Color.FromArgb(255, RndByte(), RndByte(), RndByte()));
-            //        clds.DrawLine(RndPosition(), RndPosition(), Color.FromArgb(255, RndByte(), RndByte(), RndByte()));
-            //    }
-            //}
-
-            //GaussianBlurEffect blur = new GaussianBlurEffect();
-            //blur.Source = cl;
-            //blur.BlurAmount = 10.0f;
-            //args.DrawingSession.DrawImage(blur);
             if (contrast != null)
             {
                 args.DrawingSession.DrawImage(contrast);
             }
-        }
-
-        GaussianBlurEffect blur;
-        HueRotationEffect hueRotation;
-        ContrastEffect contrast;
-        private void canvas_CreateResources(
-            Microsoft.Graphics.Canvas.UI.Xaml.CanvasAnimatedControl sender,
-            Microsoft.Graphics.Canvas.UI.CanvasCreateResourcesEventArgs args)
-        {
-            //CanvasCommandList cl = new CanvasCommandList(sender);
-            //using (CanvasDrawingSession clds = cl.CreateDrawingSession())
-            //{
-            //    for (int i = 0; i < 100; i++)
-            //    {
-            //        clds.DrawText("Hello, World!", RndPosition(), Color.FromArgb(255, RndByte(), RndByte(), RndByte()));
-            //        clds.DrawCircle(RndPosition(), RndRadius(), Color.FromArgb(255, RndByte(), RndByte(), RndByte()));
-            //        clds.DrawLine(RndPosition(), RndPosition(), Color.FromArgb(255, RndByte(), RndByte(), RndByte()));
-            //    }
-            //}
-
-            //blur = new GaussianBlurEffect()
-            //{
-            //    Source = cl,
-            //    BlurAmount = 10.0f
-            //};
-        }
-
-        private void canvas_DrawAnimated(
-    Microsoft.Graphics.Canvas.UI.Xaml.ICanvasAnimatedControl sender,
-    Microsoft.Graphics.Canvas.UI.Xaml.CanvasAnimatedDrawEventArgs args)
-        {
-            //float radius = (float)(1 + Math.Sin(args.Timing.TotalTime.TotalSeconds)) * 10f;
-            //blur.BlurAmount = radius;
         }
 
         void Page_Unloaded(object sender, RoutedEventArgs e)
@@ -121,7 +73,8 @@ namespace Uwp001.Pages
             openPicker.FileTypeFilter.Add(".jpg");
             openPicker.FileTypeFilter.Add(".jpeg");
             openPicker.FileTypeFilter.Add(".png");
-            //pick only one file once a time
+
+            // Pick only one file once a time
             StorageFile file = await openPicker.PickSingleFileAsync();
 
             if (file == null)
@@ -165,7 +118,6 @@ namespace Uwp001.Pages
                 
                 var image = new BitmapImage();
                 await image.SetSourceAsync(fileStream);
-                BlurredBackground.UpdateImage(image);
             }
         }
 
