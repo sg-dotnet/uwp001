@@ -15,6 +15,25 @@ Win2D is an easy-to-use Windows Runtime API for immediate mode 2D graphics rende
 - [Temperature and Tint](https://microsoft.github.io/Win2D/html/T_Microsoft_Graphics_Canvas_Effects_TemperatureAndTintEffect.htm)
 - [Grayscale](https://microsoft.github.io/Win2D/html/T_Microsoft_Graphics_Canvas_Effects_GrayscaleEffect.htm)
 
+## Contributions are welcome!
+
+PPT will continue to evolve. We add new features all the time, but we have too many new cool ideas.
+
+Any help will be appreciated. You can develop new features, fix bugs, improve the documentation, or do some other cool stuff.
+
+If you have new ideas or want to complain about bugs, feel free to [create a new issue](https://github.com/sg-dotnet/uwp001/issues/new).
+
+Let's build the best tool for demonstrating the power of Win2D and WinUI together!
+
+## Code of Conduct
+
+This project has adopted the code of conduct defined by the [Contributor Covenant](http://contributor-covenant.org/)
+to clarify expected behavior in our community.
+
+## Singapore .NET Developers Community
+
+This project is supported by the [Singapore .NET Developers Community](http://dotnet.sg).
+
 ## References
 - [Microsoft.Graphics.Canvas.Effects Namespace](https://microsoft.github.io/Win2D/html/N_Microsoft_Graphics_Canvas_Effects.htm)
 - [XAML Controls Gallery](https://www.microsoft.com/en-sg/p/xaml-controls-gallery/9msvh128x2zt?activetab=pivot:regionofsystemrequirementstab)
