@@ -1,7 +1,6 @@
 ﻿using System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using System.Numerics;
 using Microsoft.Graphics.Canvas;
 using Microsoft.Graphics.Canvas.Effects;
 using Windows.Storage;
@@ -9,6 +8,7 @@ using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.Graphics.Imaging;
+using Windows.UI.Xaml.Controls.Primitives;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -23,6 +23,10 @@ namespace Uwp001.Pages
         GaussianBlurEffect blur;
         HueRotationEffect hueRotation;
         ContrastEffect contrast;
+        SaturationEffect saturation;
+        TemperatureAndTintEffect temperatureAndTint;
+        GrayscaleEffect grayscale;
+        ICanvasEffect canvasEffect;
 
         public HomePage()
         {
@@ -35,9 +39,9 @@ namespace Uwp001.Pages
         // Reference: https://microsoft.github.io/Win2D/html/E_Microsoft_Graphics_Canvas_UI_Xaml_CanvasControl_Draw.htm
         private void canvas_Draw(Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl sender, Microsoft.Graphics.Canvas.UI.Xaml.CanvasDrawEventArgs args)
         {
-            if (contrast != null)
+            if (canvasEffect != null)
             {
-                args.DrawingSession.DrawImage(contrast);
+                args.DrawingSession.DrawImage(canvasEffect);
             }
         }
 
@@ -45,24 +49,6 @@ namespace Uwp001.Pages
         {
             canvas.RemoveFromVisualTree();
             canvas = null;
-        }
-
-        Random rnd = new Random();
-        private Vector2 RndPosition()
-        {
-            double x = rnd.NextDouble() * 1000f;
-            double y = rnd.NextDouble() * 1000f;
-            return new Vector2((float)x, (float)y);
-        }
-
-        private float RndRadius()
-        {
-            return (float)rnd.NextDouble() * 500f;
-        }
-
-        private byte RndByte()
-        {
-            return (byte)rnd.Next(256);
         }
 
         private async void btnUpload_Clicked(object sender, RoutedEventArgs e)
@@ -94,17 +80,43 @@ namespace Uwp001.Pages
                         await decoder.GetSoftwareBitmapAsync(BitmapPixelFormat.Rgba16, BitmapAlphaMode.Premultiplied)));
                 }
 
-                blur = new GaussianBlurEffect();
-                blur.Source = cl;
-                blur.BlurAmount = (float)gaussianBlurAmountSlider.Value;
+                blur = new GaussianBlurEffect
+                {
+                    Source = cl,
+                    BlurAmount = (float)gaussianBlurAmountSlider.Value
+                };
 
-                hueRotation = new HueRotationEffect();
-                hueRotation.Source = blur;
-                hueRotation.Angle = (float)hueRotationAmountSlider.Value / 100f * 360f;
+                hueRotation = new HueRotationEffect
+                {
+                    Source = blur,
+                    Angle = (float)hueRotationAmountSlider.Value / 100f * 360f
+                };
 
-                contrast = new ContrastEffect();
-                contrast.Source = hueRotation;
-                contrast.Contrast = (float)(contrastAmountSlider.Value - 50) / 50;
+                contrast = new ContrastEffect
+                {
+                    Source = hueRotation,
+                    Contrast = (float)(contrastAmountSlider.Value - 50f) / 50f
+                };
+
+                saturation = new SaturationEffect
+                {
+                    Source = contrast,
+                    Saturation = (float)saturationAmountSlider.Value / 100f
+                };
+
+                temperatureAndTint = new TemperatureAndTintEffect
+                {
+                    Source = saturation,
+                    Temperature = (float)(temperatureAmountSlider.Value - 50f) / 50f,
+                    Tint = (float)(tintAmountSlider.Value - 50f) / 50f
+                };
+
+                grayscale = new GrayscaleEffect
+                {
+                    Source = temperatureAndTint
+                };
+
+                canvasEffect = saturation;
 
                 // CanvasControl.Invalidate Method iIndicates that the contents of the CanvasControl need to be redrawn. 
                 // Calling Invalidate results in the Draw event being raised shortly afterward.
@@ -115,27 +127,76 @@ namespace Uwp001.Pages
                 gaussianBlurAmountSlider.IsEnabled = true;
                 hueRotationAmountSlider.IsEnabled = true;
                 contrastAmountSlider.IsEnabled = true;
+                saturationAmountSlider.IsEnabled = true;
+                temperatureAmountSlider.IsEnabled = true;
+                tintAmountSlider.IsEnabled = true;
+                grayscaleBufferPrevision.IsEnabled = true;
                 
                 var image = new BitmapImage();
                 await image.SetSourceAsync(fileStream);
             }
         }
 
-        private void GaussianBlurAmountSlider_ValueChanged(object sender, Windows.UI.Xaml.Controls.Primitives.RangeBaseValueChangedEventArgs e)
+        private void GaussianBlurAmountSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
             blur.BlurAmount = (float)e.NewValue;
             canvas.Invalidate();
         }
 
-        private void HueRotationAmountSlider_ValueChanged(object sender, Windows.UI.Xaml.Controls.Primitives.RangeBaseValueChangedEventArgs e)
+        private void HueRotationAmountSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
             hueRotation.Angle = (float)e.NewValue / 100f * 360f;
             canvas.Invalidate();
         }
 
-        private void ContrastAmountSlider_ValueChanged(object sender, Windows.UI.Xaml.Controls.Primitives.RangeBaseValueChangedEventArgs e)
+        private void ContrastAmountSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
             contrast.Contrast = (float)(e.NewValue - 50) / 50f;
+            canvas.Invalidate();
+        }
+
+        private void SaturationAmountSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            saturation.Saturation = (float)e.NewValue / 100f;
+            canvas.Invalidate();
+        }
+
+        private void TemperatureAmountSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            temperatureAndTint.Temperature = (float)(e.NewValue - 50) / 50f;
+            canvas.Invalidate();
+        }
+
+        private void TintAmountSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            temperatureAndTint.Tint = (float)(e.NewValue - 50) / 50f;
+            canvas.Invalidate();
+        }
+
+        private void GrayscaleBufferPrevision0_Click(object sender, RoutedEventArgs e)
+        {
+            canvasEffect = temperatureAndTint;
+            canvas.Invalidate();
+        }
+
+        private void GrayscaleBufferPrevision1_Click(object sender, RoutedEventArgs e)
+        {
+            grayscale.BufferPrecision = CanvasBufferPrecision.Precision16Float;
+            canvasEffect = grayscale;
+            canvas.Invalidate();
+        }
+
+        private void GrayscaleBufferPrevision2_Click(object sender, RoutedEventArgs e)
+        {
+            grayscale.BufferPrecision = CanvasBufferPrecision.Precision32Float;
+            canvasEffect = grayscale;
+            canvas.Invalidate();
+        }
+
+        private void GrayscaleBufferPrevision3_Click(object sender, RoutedEventArgs e)
+        {
+            grayscale.BufferPrecision = CanvasBufferPrecision.Precision8UIntNormalized;
+            canvasEffect = grayscale;
             canvas.Invalidate();
         }
     }

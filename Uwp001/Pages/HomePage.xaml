@@ -91,19 +91,39 @@
                    Text="CONTROLS" />
 
                 <Slider x:Name="gaussianBlurAmountSlider" Header="Gaussian Blur" 
-                        Width="{Binding Path=ActualWidth, ElementName=gaussianBlurAmountSliderParentPanel}"
                         ValueChanged="GaussianBlurAmountSlider_ValueChanged"
                         IsEnabled="False" />
 
                 <Slider x:Name="hueRotationAmountSlider" Header="Hue Rotation" 
-                        Width="{Binding Path=ActualWidth, ElementName=gaussianBlurAmountSliderParentPanel}"
                         ValueChanged="HueRotationAmountSlider_ValueChanged" 
                         IsEnabled="False" />
 
                 <Slider x:Name="contrastAmountSlider" Header="Contrast" 
-                        Width="{Binding Path=ActualWidth, ElementName=gaussianBlurAmountSliderParentPanel}"
                         ValueChanged="ContrastAmountSlider_ValueChanged" 
                         IsEnabled="False" />
+
+                <Slider x:Name="saturationAmountSlider" Header="Saturation" 
+                        ValueChanged="SaturationAmountSlider_ValueChanged" 
+                        IsEnabled="False" />
+
+                <Slider x:Name="temperatureAmountSlider" Header="Temperature" 
+                        ValueChanged="TemperatureAmountSlider_ValueChanged" 
+                        IsEnabled="False" />
+
+                <Slider x:Name="tintAmountSlider" Header="Tint" 
+                        ValueChanged="TintAmountSlider_ValueChanged" 
+                        IsEnabled="False" />
+                
+                <DropDownButton x:Name="grayscaleBufferPrevision" Content="Grayscale" IsEnabled="False">
+                    <DropDownButton.Flyout>
+                        <MenuFlyout Placement="Bottom" >
+                            <MenuFlyoutItem x:Name="grayscaleBufferPrevision0" Text="No Grayscale" Click="GrayscaleBufferPrevision0_Click"/>
+                            <MenuFlyoutItem x:Name="grayscaleBufferPrevision1" Text="Precision 16 Float" Click="GrayscaleBufferPrevision1_Click"/>
+                            <MenuFlyoutItem x:Name="grayscaleBufferPrevision2" Text="Precision 32 Float" Click="GrayscaleBufferPrevision2_Click"/>
+                            <MenuFlyoutItem x:Name="grayscaleBufferPrevision3" Text="Precision 8 UInt Normalized" Click="GrayscaleBufferPrevision3_Click"/>
+                        </MenuFlyout>
+                    </DropDownButton.Flyout>
+                </DropDownButton>
             </StackPanel>
 
             <StackPanel Grid.Row="3" Grid.Column="1"
