@@ -1,7 +1,7 @@
 # Photo Processing Tool, PPT (Project Code: UWP001)
 A project to demonstrate the power of Win2D and WinUI in UWP.
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 This is a demo UWP app showcasing the features available in Win2D and WinUI.
 
